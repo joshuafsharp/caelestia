@@ -23,30 +23,38 @@ StyledRect {
         anchors.centerIn: parent
         spacing: Config.border.rounding
 
+        // Search (Fuzzel)
+        AppIcon {
+            desktopEntry: ""
+            directIcon: "system-search"
+            appName: "Search"
+            command: ["fuzzel"]
+        }
+
         // Steam
         AppIcon {
-            iconName: "steam"
+            desktopEntry: "steam"
             appName: "Steam"
             command: ["steam"]
         }
 
         // Firefox
         AppIcon {
-            iconName: "firefox"
+            desktopEntry: "firefox"
             appName: "Firefox"
             command: ["firefox"]
         }
 
         // Thunar (File Manager)
         AppIcon {
-            iconName: "folder"
+            desktopEntry: "thunar"
             appName: "Files"
             command: ["thunar"]
         }
 
         // Volume Control
         AppIcon {
-            iconName: "volume_up"
+            desktopEntry: "org.pulseaudio.pavucontrol"
             appName: "Volume"
             command: ["pavucontrol"]
         }

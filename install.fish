@@ -189,7 +189,8 @@ end
 # Quickshell
 if confirm-overwrite $config/quickshell
     log 'Installing quickshell config...'
-    ln -s (realpath quickshell) $config/quickshell
+    mkdir -p $config/quickshell/caelestia
+    ln -s (realpath quickshell)/* $config/quickshell/caelestia/
 end
 
 # Install spicetify

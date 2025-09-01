@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import "root:/services"
 import "root:/config"
 import "root:/utils"
+import "root:/widgets"
 import Quickshell
 import QtQuick
 
@@ -11,45 +12,44 @@ Item {
 
     required property PersistentProperties visibilities
 
-    visible: height > 0
-    implicitHeight: 0
+    visible: true  // Always visible to show indicator
+    implicitHeight: root.visibilities.dock ? content.implicitHeight : 6  // Minimal height for indicator
     implicitWidth: content.implicitWidth
 
-    states: State {
-        name: "visible"
-        when: root.visibilities.dock
+    // Remove states since we handle height directly above
 
-        PropertyChanges {
-            root.implicitHeight: content.implicitHeight
+    Behavior on implicitHeight {
+        NumberAnimation {
+            duration: Appearance.anim.durations.normal
+            easing.type: Easing.BezierSpline
+            easing.bezierCurve: Appearance.anim.curves.standard
         }
     }
 
-    transitions: [
-        Transition {
-            from: ""
-            to: "visible"
-
+    // Dock indicator - shows when dock is hidden
+    StyledRect {
+        id: indicator
+        
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 1
+        
+        width: 8
+        height: 2
+        radius: height / 2
+        
+        color: Colours.palette.m3onSurface
+        opacity: root.visibilities.dock ? 0 : 0.3
+        visible: opacity > 0
+        
+        Behavior on opacity {
             NumberAnimation {
-                target: root
-                property: "implicitHeight"
-                duration: Appearance.anim.durations.expressiveDefaultSpatial
-                easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-            }
-        },
-        Transition {
-            from: "visible"
-            to: ""
-
-            NumberAnimation {
-                target: root
-                property: "implicitHeight"
                 duration: Appearance.anim.durations.normal
                 easing.type: Easing.BezierSpline
-                easing.bezierCurve: Appearance.anim.curves.emphasized
+                easing.bezierCurve: Appearance.anim.curves.standard
             }
         }
-    ]
+    }
 
     Loader {
         id: content

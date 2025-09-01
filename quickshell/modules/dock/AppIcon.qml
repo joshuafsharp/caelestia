@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import "root:/widgets"
 import "root:/services"
 import "root:/config"
+import "root:/utils"
 import Quickshell
 import Quickshell.Widgets
 import QtQuick
@@ -10,12 +11,15 @@ import QtQuick
 Item {
     id: root
 
-    required property string iconName
+    required property string desktopEntry
+    property string directIcon: ""  // Optional: use direct icon name instead of desktop entry
     required property string appName
     required property list<string> command
 
-    implicitWidth: Config.dashboard.sizes.tabIndicatorHeight * 2
-    implicitHeight: Config.dashboard.sizes.tabIndicatorHeight * 2
+    implicitWidth: 48
+    implicitHeight: 48
+    width: implicitWidth
+    height: implicitHeight
 
     CustomMouseArea {
         id: mouse
@@ -122,13 +126,14 @@ Item {
             }
         }
 
-        MaterialIcon {
+        IconImage {
             id: icon
 
             anchors.centerIn: parent
-            text: root.iconName
-            color: Colours.palette.m3onSurface
-            font.pointSize: Appearance.font.size.extraLarge
+            source: root.directIcon !== "" 
+                ? Quickshell.iconPath(root.directIcon, "application-x-executable")
+                : Quickshell.iconPath(Icons.getDesktopEntry(root.desktopEntry)?.icon, "application-x-executable")
+            implicitSize: parent.width * 0.7
 
             scale: mouse.pressed ? 0.9 : mouse.hovered ? 1.1 : 1.0
 

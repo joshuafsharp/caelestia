@@ -48,7 +48,17 @@ MouseArea {
         const centerX = root.width / 2;
         const dockLeft = centerX - dockWidth / 2;
         const dockRight = centerX + dockWidth / 2;
-        const dockTop = root.height - Config.border.thickness - 60; // dock hover area height
+        
+        // If dock is visible, include its actual area plus hover zone
+        // If dock is hidden, just use bottom hover zone
+        const dockHeight = panels.dock.implicitHeight || 0;
+        const launcherHeight = panels.launcher.height || 0;
+        const bottomMargin = launcherHeight + Config.border.rounding;
+        const hoverZoneHeight = 60;
+        
+        const dockTop = visibilities.dock 
+            ? root.height - bottomMargin - dockHeight - hoverZoneHeight
+            : root.height - Config.border.thickness - hoverZoneHeight;
         
         return x >= dockLeft && x <= dockRight && y >= dockTop;
     }
